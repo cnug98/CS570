@@ -1,0 +1,37 @@
+
+Please answer the following questions to explain your implementation (Directly write your answer below the questions).
+
+
+
+1. Which are the critical regions need to be protected for mutula exclusion? Why are they? 
+
+The critical regions are the insert and remove functions. Unlike the last assignemnt, the whole functions need to be protected since both the index and index value need to be protected at the same time, meaning that they can't be tampered by the opposite function when working to protect execution order. While it is slower, it allows the items to be inserted and removed correctly and the correct index counters to be used.
+
+
+
+
+
+2. There are 7 requirements your program should achieve: 
+
+1)	When a producer thread inserts a new item into the buffer, a message should be print to screen showing which thread (with ID) insert which item (with value) to which buffer slot (with next_in)
+2)	When a consumer thread removes a new item from the buffer, a message should be print to screen showing which thread (with ID) remove which item (with value) from which buffer slot (with next_out)
+3)	Producers must block if the buffer is full,
+4)	Consumers must block if the buffer is empty,
+5)	No two/more producers insert items to the same buffer slot,
+6)	No two/more consumers remove the items from the same buffer slot,
+7)	The messages must be printed in the order showing the real execution scenarios.
+
+Please explain how they are satisfied in your design (you need to explain one by one!)
+1)The insert_item method has both the thread id, buffer slot and item value utilized in it, meaning that the statement can be printed there, which it is printed after the item is inserted. 
+2)The remove_item method has both the thread id, buffer slot and item value utilized in it, meaning that the statement can be printed there, which it is printed after the item is removed. However, the item information has to be stored to a pointer before it is deleted in order for it to be used in the print statement. 
+3)The insert_item method has a semaphore that locks the function out if the buffer is maxed out with items. Whenever an item is inserted, the full semaphore is incremented, which will affect the insert function once the buffer is full.
+4)The remove_items method has a semaphore that locks the function out if the buffer is completely empty. Whenever an item is removed, the empty semaphore is incremented, and once it is maxed out, the process will not remove further items.
+5)The semaphore lock prevents more than one producer from affecting the same buffer slot. Once the lock is released, that buffer slot can be affected once again.
+6)Like the previous point, the same semaphore lock prevents the same buffer slot from being affected by two or more consumers. Unless the lock is released, the buffer can only be affected by one consumer at a time.
+7)The thread startup message is printed right after the thread is created. In the same vein, once an item has been inserted or removed, a print statement immediately follows the process's completion.
+
+3) Why you think your design is the most effective one? Is there any other design also works but less effective? 
+I believe my design is the most effective because it utilizes already given code as well as using as few semaphore locks as possible (an empty and full signal, along with a mutex signal). This allows the processes to be completed faster since there are fewer semaphore values to reference and the methods to manipulate the items and buffer pointers are very simplistic. If there is a better design to use, I'd honestly like to see it, but since the concepts are simple to implement, I don't think there are any better ideas to use.
+
+
+
