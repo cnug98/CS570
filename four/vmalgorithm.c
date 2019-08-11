@@ -83,7 +83,7 @@ int FIFO() {
    int page_faults = 0, k = 0; //initializes page fault counter along with loop counters and flags
    int m, n, s;
    
-   for(m = 0; m < ReferenceSZ; m++) { //cycle through full page range
+   for(m = 0; m < AccessPatternLength); m++) { //cycle through full page range
         s = 0;
         for(n = 0; n < FrameNR; n++) { //cycles through each frame for page hit
             if(accessPattern[m] == memory.PageFrameList[n]){ //if found
@@ -123,7 +123,7 @@ int LRU() {
       int temp[FrameNR]; //initialized temp array to hold lru index for replacement
       int m, n, k, l, position; //initializes loop counters and flags
       int a = 0, b = 0, page_faults = 0;
-      for(n = 0; n < ReferenceSZ; n++){ //cycle through page range
+      for(n = 0; n < AccessPatternLength); n++){ //cycle through page range
             a = 0, b = 0;
             for(m = 0; m < FrameNR; m++){
                   if(memory.PageFrameList[m] == accessPattern[n]) { //if page hit is found
